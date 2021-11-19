@@ -9,7 +9,6 @@ export const takePicture = async camera => {
 
 export const retakePhoto = async () => {
   const lastPicture = await CameraRoll.getPhotos({first: 1});
-  console.log(JSON.stringify(lastPicture, null, 2));
   CameraRoll.deletePhotos([lastPicture.edges[0].node.image.uri]);
 };
 
