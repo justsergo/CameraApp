@@ -1,76 +1,62 @@
 import React from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {TouchableOpacity, View, Image, SafeAreaView} from 'react-native';
 import {RNCamera} from 'react-native-camera';
+import {gStyle, image} from '../styles/styles';
+import {takePicture, retakePhoto, PendingView} from './helpers';
 
-const Camera = () => {
-  takePicture = async () => {
-    if (camera) {
-      const options = {quality: 0.5, base64: true};
-      const data = await camera.takePictureAsync(options);
-      console.log(data.uri);
-    }
+function Camera() {
+  const [modeOn, handleMode] = React.useState(RNCamera.Constants.FlashMode.on);
+  const handleFlash = () => {
+    handleMode(
+      modeOn
+        ? RNCamera.Constants.FlashMode.off
+        : RNCamera.Constants.FlashMode.on,
+    );
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={gStyle.container}>
       <RNCamera
-        ref={ref => {
-          camera = ref;
-        }}
-        style={styles.preview}
+        style={gStyle.preview}
         type={RNCamera.Constants.Type.back}
-        flashMode={RNCamera.Constants.FlashMode.on}
-        androidCameraPermissionOptions={{
-          title: 'Permission to use camera',
-          message: 'We need your permission to use your camera',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
+        flashMode={modeOn}>
+        {({camera, status}) => {
+          if (status !== 'READY') return <PendingView />;
+          return (
+            <View style={gStyle.iconPanel}>
+              <TouchableOpacity onPress={handleFlash} style={gStyle.capture}>
+                <Image
+                  style={image.container}
+                  source={{
+                    uri: modeOn
+                      ? 'http://simpleicon.com/wp-content/uploads/flash.png'
+                      : 'https://cdn-icons-png.flaticon.com/128/248/248053.png',
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => takePicture(camera)}
+                style={gStyle.capture}>
+                <Image
+                  style={image.container}
+                  source={{
+                    uri: 'https://git.krews.org/uploads/-/system/project/avatar/192/Circular_Camera-512.png',
+                  }}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={retakePhoto} style={gStyle.capture}>
+                <Image
+                  style={image.container}
+                  source={{
+                    uri: 'https://www.freeiconspng.com/uploads/arrow-reload-icon--28.png',
+                  }}
+                />
+              </TouchableOpacity>
+            </View>
+          );
         }}
-        androidRecordAudioPermissionOptions={{
-          title: 'Permission to use audio recording',
-          message: 'We need your permission to use your audio',
-          buttonPositive: 'Ok',
-          buttonNegative: 'Cancel',
-        }}
-        onGoogleVisionBarcodesDetected={({barcodes}) => {
-          console.log(barcodes);
-        }}
-      />
-      <View style={{flex: 0, flexDirection: 'row', justifyContent: 'center'}}>
-        <TouchableOpacity onPress={takePicture} style={styles.capture}>
-          <Text style={{fontSize: 14}}> SNAP </Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+      </RNCamera>
+    </SafeAreaView>
   );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: 'black',
-  },
-  preview: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    padding: 15,
-    paddingHorizontal: 20,
-    alignSelf: 'center',
-    margin: 20,
-  },
-});
-
+}
 export default Camera;
