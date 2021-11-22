@@ -29,4 +29,7 @@ export const image = StyleSheet.create({
     width: 40,
     height: 40,
   },
+  photo: {
+    flex: 1,
+  },
 });

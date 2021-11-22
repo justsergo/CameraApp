@@ -2,10 +2,12 @@ import React from 'react';
 import {TouchableOpacity, View, Image, SafeAreaView} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import {gStyle, image} from '../styles/styles';
-import {takePicture, retakePhoto, PendingView} from './helpers';
+import {takePicture, retakePhoto, PendingView, lastPicture} from './helpers';
 
-function Camera() {
+const Camera = () => {
   const [modeOn, handleMode] = React.useState(RNCamera.Constants.FlashMode.on);
+  const [showLastPicture, setShowLastPicture] = React.useState(false);
+
   const handleFlash = () => {
     handleMode(
       modeOn
@@ -13,7 +15,14 @@ function Camera() {
         : RNCamera.Constants.FlashMode.on,
     );
   };
+  const handleShowPicture = () => {
+    setShowLastPicture(true);
+    setTimeout(() => setShowLastPicture(false), 3000);
+  };
 
+  if (showLastPicture) {
+    return <Image style={image.photo} source={{lastPicture}} />;
+  }
   return (
     <SafeAreaView style={gStyle.container}>
       <RNCamera
@@ -22,6 +31,7 @@ function Camera() {
         flashMode={modeOn}>
         {({camera, status}) => {
           if (status !== 'READY') return <PendingView />;
+
           return (
             <View style={gStyle.iconPanel}>
               <TouchableOpacity onPress={handleFlash} style={gStyle.capture}>
@@ -35,7 +45,7 @@ function Camera() {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => takePicture(camera)}
+                onPress={(() => takePicture(camera), handleShowPicture)}
                 style={gStyle.capture}>
                 <Image
                   style={image.container}
@@ -58,5 +68,5 @@ function Camera() {
       </RNCamera>
     </SafeAreaView>
   );
-}
+};
 export default Camera;
