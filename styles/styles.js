@@ -10,8 +10,6 @@ export const gStyle = StyleSheet.create({
     flexDirection: 'column-reverse',
   },
   capture: {
-    flex: 0,
-    alignSelf: 'center',
     paddingLeft: 20,
     paddingRight: 20,
     margin: 20,
@@ -20,7 +18,11 @@ export const gStyle = StyleSheet.create({
     backgroundColor: '#828282cf',
     flex: 0,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
+  },
+  saveBlock: {
+    flex: 1,
+    flexDirection: 'column',
   },
 });
 
