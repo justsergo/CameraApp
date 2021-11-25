@@ -17,6 +17,22 @@ const Camera = () => {
     );
   };
 
+  const save = () => {
+    savePicture(uriPicture);
+    setShowPicture(false);
+  };
+
+  const makePicture = async camera => {
+    await takePicture(camera, setUriPicture);
+    setShowPicture(true);
+  };
+
+  const retake = async camera => {
+    retakePhoto();
+    await takePicture(camera, setUriPicture);
+    setShowPicture(true);
+  };
+
   return (
     <SafeAreaView style={gStyle.container}>
       {showPicture ? (
@@ -31,8 +47,7 @@ const Camera = () => {
             <TouchableOpacity
               style={gStyle.capture}
               onPress={() => {
-                savePicture(uriPicture);
-                setShowPicture(false);
+                save();
               }}>
               <Image
                 style={image.container}
@@ -76,9 +91,8 @@ const Camera = () => {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={async () => {
-                    await takePicture(camera, setUriPicture);
-                    setShowPicture(true);
+                  onPress={() => {
+                    makePicture(camera);
                   }}
                   style={gStyle.capture}>
                   <Image
@@ -89,10 +103,8 @@ const Camera = () => {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={async () => {
-                    retakePhoto();
-                    await takePicture(camera, setUriPicture);
-                    setShowPicture(true);
+                  onPress={() => {
+                    retake(camera);
                   }}
                   style={gStyle.capture}>
                   <Image
