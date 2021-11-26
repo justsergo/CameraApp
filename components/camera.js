@@ -44,11 +44,7 @@ const Camera = () => {
             }}
           />
           <View style={gStyle.iconPanel}>
-            <TouchableOpacity
-              style={gStyle.capture}
-              onPress={() => {
-                save();
-              }}>
+            <TouchableOpacity style={gStyle.capture} onPress={save}>
               <Image
                 style={image.container}
                 source={{
@@ -76,6 +72,9 @@ const Camera = () => {
           type={RNCamera.Constants.Type.back}
           flashMode={modeOn}>
           {({camera, status}) => {
+            const extendMakePicture = () => makePicture(camera);
+            const extendRetake = () => retake(camera);
+
             if (status !== 'READY') return <PendingView />;
 
             return (
@@ -91,9 +90,7 @@ const Camera = () => {
                   />
                 </TouchableOpacity>
                 <TouchableOpacity
-                  onPress={() => {
-                    makePicture(camera);
-                  }}
+                  onPress={extendMakePicture}
                   style={gStyle.capture}>
                   <Image
                     style={image.container}
@@ -102,11 +99,7 @@ const Camera = () => {
                     }}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    retake(camera);
-                  }}
-                  style={gStyle.capture}>
+                <TouchableOpacity onPress={extendRetake} style={gStyle.capture}>
                   <Image
                     style={image.container}
                     source={{
