@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export const gStyle = StyleSheet.create({
   container: {
@@ -19,10 +19,6 @@ export const gStyle = StyleSheet.create({
     flex: 0,
     flexDirection: 'row',
     justifyContent: 'space-around',
-  },
-  saveBlock: {
-    flex: 1,
-    flexDirection: 'column',
   },
 });
 
